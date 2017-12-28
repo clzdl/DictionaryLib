@@ -98,6 +98,7 @@ void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* ele
 	{///第一层节点
 		m_elePropertys.push_back(std::shared_ptr<IEleProperty>(eleProPerty));
 		m_eleProperty4Search.insert(std::make_pair(path,eleProPerty));
+		eleProPerty->SetEleNode(ElementManager::Instance()->GetEleNodeByPath(path));
 		return ;
 	}
 
@@ -120,6 +121,7 @@ void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* ele
 		{//第一层节点
 			m_elePropertys.push_back(std::make_shared<EleStructProperty>());
 			m_eleProperty4Search.insert(std::make_pair(curPath,m_elePropertys.back().get()));
+			m_elePropertys.back()->SetEleNode(ElementManager::Instance()->GetEleNodeByPath(curPath));
 			ptrParent = m_elePropertys.back().get();
 			continue;
 		}
@@ -127,12 +129,14 @@ void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* ele
 		{
 			EleStructProperty* ptrStruct = dynamic_cast<EleStructProperty*>(ptrParent);
 			EleStructProperty* ptrCurStruct = new EleStructProperty();
+			ptrCurStruct->SetEleNode(ElementManager::Instance()->GetEleNodeByPath(curPath));
 			ptrStruct->Insert(curPath , ptrCurStruct);
 			m_eleProperty4Search.insert(std::make_pair(curPath,ptrCurStruct));
 			ptrParent = ptrCurStruct;
 		}
 	}
 	EleStructProperty* ptrStruct = dynamic_cast<EleStructProperty*>(ptrParent);
+	eleProPerty->SetEleNode(ElementManager::Instance()->GetEleNodeByPath(path));
 	ptrStruct->Insert(path , eleProPerty);
 	m_eleProperty4Search.insert(std::make_pair(path,eleProPerty));
 }
@@ -143,6 +147,19 @@ void DictPropertyManager::DebugDump()
 	{
 		it->DebugDump(0);
 	}
+}
+
+int DictPropertyManager::Encode(char *buffer)
+{
+	char *p = buffer;
+	int tmpSize = 0;
+	for(auto it : m_elePropertys)
+	{
+		tmpSize = it->Encode(p);
+		p += tmpSize;
+	}
+
+	return p - buffer;
 }
 
 }

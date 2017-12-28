@@ -14,6 +14,15 @@ namespace DictionaryLib
 {
 ElementManager* ElementManager::m_objInstance = nullptr;
 
+ElementNode::ElementNode()
+:m_eleType(EnumEleType::_primitive),
+ m_avpCode(0),
+ m_outType(true),
+ m_ptrParent(nullptr)
+{
+
+}
+
 ElementNode::ElementNode(EnumEleType eleType)
 :m_eleType(eleType),
  m_avpCode(0),

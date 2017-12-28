@@ -8,7 +8,7 @@
 
 #include "DictElement.h"
 #include "DictPropertyManager.h"
-
+#include "fstream"
 
 int main(int argc, char* argv[])
 {
@@ -24,6 +24,12 @@ int main(int argc, char* argv[])
 		property->SetFieldValueByPath("Subscription-Id.Subscription-Id-Data", "Subscription-Id-Data-12123123");
 		fprintf(stdout , "///////////////////////////////////\n");
 		property->DebugDump();
+		fprintf(stdout , "///////////////////////////////////\n");
+		char buffer[8096] = {0};
+		int len = property->Encode(buffer);
+
+		std::ofstream of("1111111111.dat",std::ios_base::binary);
+		of.write(buffer , len);
 	}
 	catch(DictionaryLib::DictionaryException &e)
 	{

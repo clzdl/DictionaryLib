@@ -47,9 +47,9 @@ public:
 
 
 	/**
-	 * 输出层级内存结构m_elePropertys成字符串流
+	 * 输出层级内存结构m_elePropertys成字符串流,输出为编码后的长度
 	 */
-	void Encode(char *buffer);
+	int Encode(char *buffer);
 
 	/**
 	 * 内存结构调试输出

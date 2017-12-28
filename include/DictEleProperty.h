@@ -41,7 +41,7 @@ public:
 	void SetValue(double value);
 
 	std::string GetValue() const;
-
+	EnumPropertyValueType GetValueType() const;
 private:
 	std::string m_value;
 	EnumPropertyValueType m_eleValueType;
@@ -56,12 +56,18 @@ public:
 	{}
 
 	virtual ~IEleProperty(){}
-
 	virtual void DebugDump(int level) = 0;
+	/**
+	 * 编码，返回值为编码后长度
+	 */
+	virtual int Encode(char *buffer ) = 0;
+
+	void SetEleNode(const ElementNode& eleNode);
 protected:
 	EnumEleType m_eleType;
 	IEleProperty *m_ptrParent;		///指向父节点
 	std::list<IEleProperty*>  m_sameSibling;   ///相同路径下的兄弟节点
+	ElementNode m_eleNode;		///指向配置节点指针
 };
 
 ///原子节点
@@ -78,6 +84,8 @@ public:
 	void SetValue(double value);
 
 	void DebugDump(int level);
+
+	int Encode(char *buffer );
 private:
 	ElePropertyValue m_eleValue;
 };
@@ -93,6 +101,7 @@ public:
 	 */
 	void Insert(std::string nodeName , IEleProperty *eleProperty);
 
+	int Encode(char *buffer );
 
 	void DebugDump(int level);
 private:

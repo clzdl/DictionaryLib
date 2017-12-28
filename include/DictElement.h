@@ -31,6 +31,11 @@ namespace DictionaryLib
 
 DECLARE_EXCEPTION(DictionaryException, CommonUtils::Exception);
 
+#define TAG_SIZE		sizeof(int)				///标签字节数
+#define LEN_SIZE		sizeof(int)				///长度字节数
+#define DOUBLE_SIZE		sizeof(double)
+#define LONG_SIZE		sizeof(long)
+
 enum class EnumEleType
 {
 	_primitive,
@@ -40,6 +45,7 @@ enum class EnumEleType
 class ElementNode
 {
 public:
+	ElementNode();
 	ElementNode(EnumEleType eleType);
 	~ElementNode();
 	ElementNode(const ElementNode &en) = default;
@@ -65,7 +71,7 @@ private:
 	EnumEleType m_eleType;
 	std::string m_path;   ///节点路径
 	std::string m_nodeName;    ///节点名称
-	std::size_t m_avpCode;		///avpCode码
+	std::size_t m_avpCode;		///avpCode码 , 每个节点的code不同
 	std::string m_funcString;			///字段解码函数(暂用作数据类型：string/long/double)
 	bool m_outType;				///是否输出标识
 	ElementNode *m_ptrParent;    ///指向父节点的指针
@@ -116,6 +122,10 @@ private:
 	std::string m_configFile;
 	//key is path
 	std::unordered_map<std::string , ElementNode> m_eleContainer;
+
+	//avpCode -> key path
+	std::unordered_map<long , std::string> m_avpCode2KeyPathRel;
+
 };
 
 }
