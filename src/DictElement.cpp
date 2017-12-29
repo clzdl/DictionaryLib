@@ -18,6 +18,7 @@ ElementNode::ElementNode()
 :m_eleType(EnumEleType::_primitive),
  m_avpCode(0),
  m_outType(true),
+ m_valueType(EnumPropertyValueType::_string),
  m_ptrParent(nullptr)
 {
 
@@ -27,6 +28,7 @@ ElementNode::ElementNode(EnumEleType eleType)
 :m_eleType(eleType),
  m_avpCode(0),
  m_outType(true),
+ m_valueType(EnumPropertyValueType::_string),
  m_ptrParent(nullptr)
 {
 }
@@ -170,6 +172,7 @@ void ElementManager::ReadXmlNode(Poco::XML::Node *xmlNode, ElementNode* eleParen
 	tmpEleNode.SetParentPtr(eleParent);
 	tmpEleNode.SetPath(nullptr == eleParent?tmpEleNode.GetNodeName() : eleParent->GetPath()+"."+tmpEleNode.GetNodeName());
 
+	m_avpCode2KeyPathRel.insert(std::make_pair(tmpEleNode.GetAvpCode() , tmpEleNode.GetPath()));
 	auto it = m_eleContainer.insert(std::make_pair(tmpEleNode.GetPath() , tmpEleNode));
 	ElementNode &eleNode = it.first->second;
 

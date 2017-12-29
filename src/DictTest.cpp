@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 		DictionaryLib::ElementManager::Instance("../conf/dict-config.xml");
 		DictionaryLib::ElementManager::Instance()->DebugDump();
 
+		char buffer[8096] = {0};
 		std::unique_ptr<DictionaryLib::DictPropertyManager> property = DictionaryLib::DictPropertyManager::Create();
 		property->SetFieldValueByPath("Session-Id", "session-id-123123");
 		property->SetFieldValueByPath("Origin-Host", "origin-host-12123123");
@@ -25,11 +26,16 @@ int main(int argc, char* argv[])
 		fprintf(stdout , "///////////////////////////////////\n");
 		property->DebugDump();
 		fprintf(stdout , "///////////////////////////////////\n");
-		char buffer[8096] = {0};
+
 		int len = property->Encode(buffer);
 
 		std::ofstream of("1111111111.dat",std::ios_base::binary);
 		of.write(buffer , len);
+//
+//		std::ifstream ifs("1111111111.dat",std::ios_base::binary);
+//		ifs.getline(buffer , 8096);
+//		property->Decode(buffer);
+//		property->DebugDump();
 	}
 	catch(DictionaryLib::DictionaryException &e)
 	{

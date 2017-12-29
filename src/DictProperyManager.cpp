@@ -31,8 +31,11 @@ DictPropertyManager::~DictPropertyManager()
 void DictPropertyManager::SetFieldValueByPath(std::string path , std::string value)
 {
 	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
-	if(en.GetEleType() != EnumEleType::_primitive)
+	if(en.GetEleType() != EnumEleType::_primitive )
 		THROW(DictionaryException , "only set primitive node.");
+
+	if(en.GetValueType() != EnumPropertyValueType::_string)
+		THROW(DictionaryException , "property value typs not _string.");
 
 	IEleProperty *ptrPeoperty = FindPropertyCache(path);
 	if(nullptr == ptrPeoperty)
@@ -52,6 +55,9 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , long value)
 	if(en.GetEleType() != EnumEleType::_primitive)
 		THROW(DictionaryException , "only set primitive node.");
 
+	if(en.GetValueType() != EnumPropertyValueType::_long)
+		THROW(DictionaryException , "property value typs not _long.");
+
 	IEleProperty *ptrPeoperty = FindPropertyCache(path);
 	if(nullptr == ptrPeoperty)
 	{
@@ -69,6 +75,9 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , double value)
 	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
 	if(en.GetEleType() != EnumEleType::_primitive)
 		THROW(DictionaryException , "only set primitive node.");
+
+	if(en.GetValueType() != EnumPropertyValueType::_double)
+		THROW(DictionaryException , "property value typs not _double.");
 
 	IEleProperty *ptrPeoperty = FindPropertyCache(path);
 	if(nullptr == ptrPeoperty)
@@ -177,9 +186,11 @@ void DictPropertyManager::Decode(char *buffer)
 	while(*p)
 	{
 		memcpy(&tmpAvpCode ,p , TAG_SIZE);
+		fprintf(stdout , "avpCode: %d \n" , tmpAvpCode);
 		eleNode = ElementManager::Instance()->GetEleNodeByCode(tmpAvpCode);
 		if(eleNode.GetEleType() == EnumEleType::_primitive)
 		{
+
 			ElePrimitiveProperty *primitiveProperty =  new ElePrimitiveProperty(this);
 			primitiveProperty->SetEleNode(eleNode);
 			tmpLen = primitiveProperty->Decode(p);

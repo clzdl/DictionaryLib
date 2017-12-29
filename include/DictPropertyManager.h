@@ -22,10 +22,6 @@ public:
 	DictPropertyManager();
 	~DictPropertyManager();
 
-	/**
-	 * 从字符串流解码成层级内存结构，存入m_elePropertys
-	 */
-	void Decode(const char *buffer);
 
 	/**
 	 *  按路径设置原子字段

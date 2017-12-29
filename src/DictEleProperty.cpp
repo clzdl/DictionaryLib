@@ -280,7 +280,7 @@ int EleStructProperty::Decode(char *buffer, IEleProperty* parent)
 	memcpy(&avpCode ,p , TAG_SIZE);
 	p += TAG_SIZE;
 
-	memcpy(&len ,buffer , LEN_SIZE);
+	memcpy(&len ,p , LEN_SIZE);
 	p += LEN_SIZE;
 
 	if(m_eleNode.GetAvpCode() == 0)
@@ -299,9 +299,11 @@ int EleStructProperty::Decode(char *buffer, IEleProperty* parent)
 	int tmpLen = 0;
 	int decodeLen = 0;
 	ElementNode eleNode;
+	fprintf(stdout , "len: %d \n" , len);
 	while(decodeLen < len)
 	{
 		memcpy(&tmpAvpCode ,p , TAG_SIZE);
+		fprintf(stdout , "avpCode: %d \n" , tmpAvpCode);
 		eleNode = ElementManager::Instance()->GetEleNodeByCode(tmpAvpCode);
 		if(eleNode.GetEleType() == EnumEleType::_primitive)
 		{
@@ -324,6 +326,8 @@ int EleStructProperty::Decode(char *buffer, IEleProperty* parent)
 
 		p += tmpLen;
 		decodeLen += tmpLen;
+
+		fprintf(stdout , "decodeLen: %d \n" , decodeLen);
 	}
 
 	if(decodeLen != len)

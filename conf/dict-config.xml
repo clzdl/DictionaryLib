@@ -15,7 +15,7 @@
 	<Origin-State-Id avp_code="278"	func="_long" node_type="primitive" out_type="false"/>
 	<Event-Timestamp avp_code="55" func="_string"	node_type="primitive" out_type="true"/>
 	<Subscription-Id avp_code="443"	node_type="composite">
-		<Subscription-Id-Type avp_code="450" func="_long"	node_type="primitive" out_type="false"/>
+		<Subscription-Id-Type avp_code="450" func="_string"	node_type="primitive" out_type="false"/>
 		<Subscription-Id-Data avp_code="444" func="_string" node_type="primitive"	out_type="false"/>
 	</Subscription-Id>
 	<Termination-Cause avp_code="295" func="_long" node_type="primitive" out_type="false"/>
