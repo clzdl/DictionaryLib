@@ -6,8 +6,11 @@
  */
 #include "NumberUtil.h"
 #include <string.h>
+#include <memory>
 #include "../include/DictEleProperty.h"
 #include "StringUtil.h"
+#include "../include/DictPropertyManager.h"
+
 namespace DictionaryLib
 {
 ElePropertyValue::ElePropertyValue(std::string value)
@@ -60,22 +63,39 @@ void IEleProperty::SetEleNode(const ElementNode& eleNode)
 	m_eleNode = eleNode;
 }
 
-ElePrimitiveProperty::ElePrimitiveProperty(std::string value)
-:IEleProperty(EnumEleType::_primitive),
+void IEleProperty::SetParent(IEleProperty *parent)
+{
+	m_ptrParent = parent;
+}
+
+void IEleProperty::SerPropertyManager(DictPropertyManager *manager)
+{
+	m_propertyManager = manager;
+}
+
+ElePrimitiveProperty::ElePrimitiveProperty(DictPropertyManager *manager,std::string value)
+:IEleProperty(EnumEleType::_primitive,manager),
  m_eleValue(value)
 {
 
 }
-ElePrimitiveProperty::ElePrimitiveProperty(long value)
-:IEleProperty(EnumEleType::_primitive),
+ElePrimitiveProperty::ElePrimitiveProperty(DictPropertyManager *manager,long value)
+:IEleProperty(EnumEleType::_primitive,manager),
  m_eleValue(value)
 {
 
 }
-ElePrimitiveProperty::ElePrimitiveProperty(double value)
-:IEleProperty(EnumEleType::_primitive),
+ElePrimitiveProperty::ElePrimitiveProperty(DictPropertyManager *manager,double value)
+:IEleProperty(EnumEleType::_primitive,manager),
  m_eleValue(value)
 {
+}
+
+ElePrimitiveProperty::ElePrimitiveProperty(DictPropertyManager *manager)
+:IEleProperty(EnumEleType::_primitive,manager),
+ m_eleValue("0")
+{
+
 }
 
 ElePrimitiveProperty::~ElePrimitiveProperty()
@@ -141,6 +161,59 @@ int ElePrimitiveProperty::Encode(char *buffer )
 	return p - buffer;
 }
 
+int ElePrimitiveProperty::Decode(char *buffer, IEleProperty* parent)
+{
+	char *p = buffer;
+	int avpCode = 0 , len = 0;
+
+	memcpy(&avpCode ,p , TAG_SIZE);
+	p += TAG_SIZE;
+
+	memcpy(&len ,p , LEN_SIZE);
+	p += LEN_SIZE;
+
+	if(m_eleNode.GetAvpCode() == 0)
+	{
+		SetEleNode(ElementManager::Instance()->GetEleNodeByCode(avpCode));
+	}
+	switch(m_eleNode.GetValueType())
+	{
+		case EnumPropertyValueType::_double:
+		{
+			double tmpValue = 0.0;
+			memcpy(&tmpValue , p , DOUBLE_SIZE);
+			p += DOUBLE_SIZE;
+			SetValue(tmpValue);
+			break;
+		}
+		case EnumPropertyValueType::_long:
+		{
+			long tmpValue = 0;
+			memcpy(&tmpValue , p , LONG_SIZE);
+			p += LONG_SIZE;
+			SetValue(tmpValue);
+			break;
+		}
+		case EnumPropertyValueType::_string:
+		{
+			std::unique_ptr<char[]> tmpValue(new char[len + 1]());
+			memcpy(tmpValue.get() , p , len);
+			p += len;
+			SetValue(tmpValue.get());
+			break;
+		}
+	}
+
+	if(nullptr != parent)
+	{
+		SetParent(parent);
+		EleStructProperty* ptrStruct = dynamic_cast<EleStructProperty*>(parent);
+		ptrStruct->Insert(m_eleNode.GetNodeName() , this);
+	}
+	m_propertyManager->Insert2SearchCache(m_eleNode.GetPath(),this);
+	return p - buffer;
+}
+
 void ElePrimitiveProperty::DebugDump(int level)
 {
 	std::string prefix;
@@ -150,8 +223,8 @@ void ElePrimitiveProperty::DebugDump(int level)
 	fprintf(stdout , "%s nodeType:%d , value:%s \n" , prefix.c_str(),m_eleType , m_eleValue.GetValue().c_str());
 }
 
-EleStructProperty::EleStructProperty()
-:IEleProperty(EnumEleType::_struct)
+EleStructProperty::EleStructProperty(DictPropertyManager *manager)
+:IEleProperty(EnumEleType::_struct,manager)
 {
 }
 EleStructProperty::~EleStructProperty()
@@ -195,6 +268,68 @@ int EleStructProperty::Encode(char *buffer )
 
 	memcpy(p , tmpBuffer, tmpTotalSize);
 	p += tmpTotalSize;
+
+	return p - buffer;
+}
+
+int EleStructProperty::Decode(char *buffer, IEleProperty* parent)
+{
+	char *p = buffer;
+	int avpCode = 0 , len = 0;
+
+	memcpy(&avpCode ,p , TAG_SIZE);
+	p += TAG_SIZE;
+
+	memcpy(&len ,buffer , LEN_SIZE);
+	p += LEN_SIZE;
+
+	if(m_eleNode.GetAvpCode() == 0)
+	{
+		SetEleNode(ElementManager::Instance()->GetEleNodeByCode(avpCode));
+	}
+
+	if(nullptr != parent)
+	{
+		SetParent(parent);
+		EleStructProperty* ptrStruct = dynamic_cast<EleStructProperty*>(parent);
+		ptrStruct->Insert(m_eleNode.GetNodeName() , this);
+	}
+
+	int tmpAvpCode = 0;
+	int tmpLen = 0;
+	int decodeLen = 0;
+	ElementNode eleNode;
+	while(decodeLen < len)
+	{
+		memcpy(&tmpAvpCode ,p , TAG_SIZE);
+		eleNode = ElementManager::Instance()->GetEleNodeByCode(tmpAvpCode);
+		if(eleNode.GetEleType() == EnumEleType::_primitive)
+		{
+			ElePrimitiveProperty *primitiveProperty = new ElePrimitiveProperty(m_propertyManager);
+			primitiveProperty->SetEleNode(eleNode);
+			tmpLen = primitiveProperty->Decode(p , this);
+			Insert(eleNode.GetNodeName() ,primitiveProperty);
+		}
+		else if(eleNode.GetEleType() == EnumEleType::_struct)
+		{
+			EleStructProperty *structPropery = new EleStructProperty(m_propertyManager);
+			structPropery->SetEleNode(eleNode);
+			tmpLen = structPropery->Decode(p , this);
+			Insert(eleNode.GetNodeName() ,structPropery);
+		}
+		else
+		{
+			THROW(DictionaryException , "element type wrong.");
+		}
+
+		p += tmpLen;
+		decodeLen += tmpLen;
+	}
+
+	if(decodeLen != len)
+		THROW(DictionaryException , "decoded len not equal content len.");
+
+	m_propertyManager->Insert2SearchCache(m_eleNode.GetPath() , this);
 
 	return p - buffer;
 }

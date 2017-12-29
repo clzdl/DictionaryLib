@@ -7,6 +7,7 @@
 
 #include "DictPropertyManager.h"
 #include "TplUtil.h"
+#include "string.h"
 #include "DictElement.h"
 
 namespace DictionaryLib
@@ -36,7 +37,7 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , std::string val
 	IEleProperty *ptrPeoperty = FindPropertyCache(path);
 	if(nullptr == ptrPeoperty)
 	{
-		ptrPeoperty =  new ElePrimitiveProperty(value);
+		ptrPeoperty =  new ElePrimitiveProperty(this,value);
 		InsertEleProperty(path , ptrPeoperty);
 	}
 	else
@@ -54,7 +55,7 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , long value)
 	IEleProperty *ptrPeoperty = FindPropertyCache(path);
 	if(nullptr == ptrPeoperty)
 	{
-		ptrPeoperty =  new ElePrimitiveProperty(value);
+		ptrPeoperty =  new ElePrimitiveProperty(this,value);
 		InsertEleProperty(path , ptrPeoperty);
 	}
 	else
@@ -72,7 +73,7 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , double value)
 	IEleProperty *ptrPeoperty = FindPropertyCache(path);
 	if(nullptr == ptrPeoperty)
 	{
-		ptrPeoperty =  new ElePrimitiveProperty(value);
+		ptrPeoperty =  new ElePrimitiveProperty(this,value);
 		InsertEleProperty(path , ptrPeoperty);
 	}
 	else
@@ -90,6 +91,11 @@ IEleProperty* DictPropertyManager::FindPropertyCache(std::string path)
 		return nullptr;
 
 	return it->second;
+}
+
+void DictPropertyManager::Insert2SearchCache(std::string path,IEleProperty* property)
+{
+	m_eleProperty4Search.insert(std::make_pair(path,property));
 }
 
 void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* eleProPerty)
@@ -119,7 +125,7 @@ void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* ele
 
 		if(i == 0 )
 		{//第一层节点
-			m_elePropertys.push_back(std::make_shared<EleStructProperty>());
+			m_elePropertys.push_back(std::make_shared<EleStructProperty>(this));
 			m_eleProperty4Search.insert(std::make_pair(curPath,m_elePropertys.back().get()));
 			m_elePropertys.back()->SetEleNode(ElementManager::Instance()->GetEleNodeByPath(curPath));
 			ptrParent = m_elePropertys.back().get();
@@ -128,7 +134,7 @@ void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* ele
 		else
 		{
 			EleStructProperty* ptrStruct = dynamic_cast<EleStructProperty*>(ptrParent);
-			EleStructProperty* ptrCurStruct = new EleStructProperty();
+			EleStructProperty* ptrCurStruct = new EleStructProperty(this);
 			ptrCurStruct->SetEleNode(ElementManager::Instance()->GetEleNodeByPath(curPath));
 			ptrStruct->Insert(curPath , ptrCurStruct);
 			m_eleProperty4Search.insert(std::make_pair(curPath,ptrCurStruct));
@@ -160,6 +166,39 @@ int DictPropertyManager::Encode(char *buffer)
 	}
 
 	return p - buffer;
+}
+
+void DictPropertyManager::Decode(char *buffer)
+{
+	char *p = buffer;
+	int tmpAvpCode = 0;
+	int tmpLen = 0;
+	ElementNode eleNode;
+	while(*p)
+	{
+		memcpy(&tmpAvpCode ,p , TAG_SIZE);
+		eleNode = ElementManager::Instance()->GetEleNodeByCode(tmpAvpCode);
+		if(eleNode.GetEleType() == EnumEleType::_primitive)
+		{
+			ElePrimitiveProperty *primitiveProperty =  new ElePrimitiveProperty(this);
+			primitiveProperty->SetEleNode(eleNode);
+			tmpLen = primitiveProperty->Decode(p);
+			m_elePropertys.push_back(std::shared_ptr<IEleProperty>(primitiveProperty));
+		}
+		else if(eleNode.GetEleType() == EnumEleType::_struct)
+		{
+			EleStructProperty *structPropery = new EleStructProperty(this);
+			structPropery->SetEleNode(eleNode);
+			tmpLen = structPropery->Decode(p);
+			m_elePropertys.push_back(std::shared_ptr<IEleProperty>(structPropery));
+		}
+		else
+		{
+			THROW(DictionaryException , "element type wrong.");
+		}
+
+		p += tmpLen;
+	}
 }
 
 }

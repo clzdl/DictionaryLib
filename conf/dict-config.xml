@@ -2,81 +2,81 @@
   
   
 <config>
-	<Session-Id	avp_code="263" func="asciiString"	node_type="primitive" out_type="true" />
-	<Origin-Host avp_code="264"	func="asciiString" node_type="primitive" out_type="true"/>
-	<Origin-Realm avp_code="296" func="asciiString"	node_type="primitive" out_type="true"/>
-	<Destination-Host avp_code="293" func="asciiString"	node_type="primitive" out_type="false"/>
-	<Destination-Realm avp_code="283" func="asciiString" node_type="primitive" out_type="false"/>
-	<Auth-Application-Id avp_code="258"	func="unsignInt32" node_type="primitive" out_type="true"/>
-	<Service-Context-Id	avp_code="461" func="asciiString"	node_type="primitive" out_type="true"/>	
-	<CC-Request-Type avp_code="416"	func="unsignInt32" node_type="primitive" out_type="true"/>
-	<CC-Request-Number avp_code="415" func="unsignInt32" node_type="primitive" out_type="true"/>
-	<User-Name avp_code="1"	func="asciiString"	node_type="primitive" out_type="false"/>
-	<Origin-State-Id avp_code="278"	func="unsignInt32" node_type="primitive" out_type="false"/>
-	<Event-Timestamp avp_code="55" func="scpTime"	node_type="primitive" out_type="true"/>
+	<Session-Id	avp_code="263" func="_string"	node_type="primitive" out_type="true" />
+	<Origin-Host avp_code="264"	func="_string" node_type="primitive" out_type="true"/>
+	<Origin-Realm avp_code="296" func="_string"	node_type="primitive" out_type="true"/>
+	<Destination-Host avp_code="293" func="_string"	node_type="primitive" out_type="false"/>
+	<Destination-Realm avp_code="283" func="_string" node_type="primitive" out_type="false"/>
+	<Auth-Application-Id avp_code="258"	func="_long" node_type="primitive" out_type="true"/>
+	<Service-Context-Id	avp_code="461" func="_string"	node_type="primitive" out_type="true"/>	
+	<CC-Request-Type avp_code="416"	func="_long" node_type="primitive" out_type="true"/>
+	<CC-Request-Number avp_code="415" func="_long" node_type="primitive" out_type="true"/>
+	<User-Name avp_code="1"	func="_string"	node_type="primitive" out_type="false"/>
+	<Origin-State-Id avp_code="278"	func="_long" node_type="primitive" out_type="false"/>
+	<Event-Timestamp avp_code="55" func="_string"	node_type="primitive" out_type="true"/>
 	<Subscription-Id avp_code="443"	node_type="composite">
-		<Subscription-Id-Type avp_code="450" func="unsignInt32"	node_type="primitive" out_type="false"/>
-		<Subscription-Id-Data avp_code="444" func="asciiString" node_type="primitive"	out_type="false"/>
+		<Subscription-Id-Type avp_code="450" func="_long"	node_type="primitive" out_type="false"/>
+		<Subscription-Id-Data avp_code="444" func="_string" node_type="primitive"	out_type="false"/>
 	</Subscription-Id>
-	<Termination-Cause avp_code="295" func="unsignInt32" node_type="primitive" out_type="false"/>
-	<Route-Record avp_code="282" func="unsignInt32"	node_type="primitive" out_type="false"/>
-	<Requested-Action avp_code="436" func="unsignInt32"	node_type="primitive" out_type="false"/>
-	<Multiple-Services-Indicator avp_code="455"	func="unsignInt32" node_type="primitive" out_type="false"/>
+	<Termination-Cause avp_code="295" func="_long" node_type="primitive" out_type="false"/>
+	<Route-Record avp_code="282" func="_long"	node_type="primitive" out_type="false"/>
+	<Requested-Action avp_code="436" func="_long"	node_type="primitive" out_type="false"/>
+	<Multiple-Services-Indicator avp_code="455"	func="_long" node_type="primitive" out_type="false"/>
 	<Multiple-Services-Credit-Control	avp_code="456" node_type="composite">
 		<Requested-Service-Unit avp_code="437" node_type="composite">
-			<CC-Time avp_code="420" func="unsignInt32" node_type="primitive" out_type="true"/>
-			<CC-Total-Octets avp_code="421" func="unsignInt64" node_type="primitive" out_type="true"/>
-			<CC-Input-Octets avp_code="412" func="unsignInt64" node_type="primitive" out_type="true"/>
-			<CC-Output-Octets avp_code="414" func="unsignInt64" node_type="primitive" out_type="true"/>
-			<CC-Service-Specific-Units avp_code="417" func="unsignInt64" node_type="primitive" out_type="false"/>
+			<CC-Time avp_code="420" func="_long" node_type="primitive" out_type="true"/>
+			<CC-Total-Octets avp_code="421" func="_long" node_type="primitive" out_type="true"/>
+			<CC-Input-Octets avp_code="412" func="_long" node_type="primitive" out_type="true"/>
+			<CC-Output-Octets avp_code="414" func="_long" node_type="primitive" out_type="true"/>
+			<CC-Service-Specific-Units avp_code="417" func="_long" node_type="primitive" out_type="false"/>
 		</Requested-Service-Unit>
 		<Used-Service-Unit avp_code="446" node_type="composite">
-			<CC-Time avp_code="420" func="unsignInt32" node_type="primitive" out_type="true"/>
-			<Reporting-Reason avp_code="872" func="unsignInt32" node_type="primitive" out_type="false"/>
-			<Tariff-Change-Usage avp_code="452" func="unsignInt32" node_type="primitive" out_type="false"/>
-			<CC-Total-Octets avp_code="421" func="unsignInt64" node_type="primitive" out_type="false"/>
-			<CC-Input-Octets avp_code="412" func="unsignInt64" node_type="primitive" out_type="false"/>
-			<CC-Output-Octets avp_code="414" func="unsignInt64" node_type="primitive" out_type="false"/>
+			<CC-Time avp_code="420" func="_long" node_type="primitive" out_type="true"/>
+			<Reporting-Reason avp_code="872" func="_long" node_type="primitive" out_type="false"/>
+			<Tariff-Change-Usage avp_code="452" func="_long" node_type="primitive" out_type="false"/>
+			<CC-Total-Octets avp_code="421" func="_long" node_type="primitive" out_type="false"/>
+			<CC-Input-Octets avp_code="412" func="_long" node_type="primitive" out_type="false"/>
+			<CC-Output-Octets avp_code="414" func="_long" node_type="primitive" out_type="false"/>
 		</Used-Service-Unit>
-		<Service-Identifier  avp_code="439" func="unsignInt32" node_type="primitive" out_type="false"/>
+		<Service-Identifier  avp_code="439" func="_long" node_type="primitive" out_type="false"/>
 	</Multiple-Services-Credit-Control>
 	<Service-Information avp_code="873" node_type="composite">
 		<IN-Information	avp_code="20300" node_type="composite">
-			<Calling-Party-Address avp_code="20336" func="asciiString" node_type="primitive" out_type="false"/>
-			<Called-Party-Address avp_code="20337" func="asciiString" node_type="primitive" out_type="false"/>
-			<SSP-Time avp_code="20386" func="scpTime" node_type="primitive" out_type="false"/>
-			<Real-Called-Number avp_code="20327" func="asciiString" node_type="primitive"	out_type="false"/>
-			<Connect-Called-Number avp_code="20373" func="asciiString" node_type="primitive" out_type="false"/>
-			<Called-Short-Number avp_code="20338" func="asciiString" node_type="primitive" out_type="false"/>
-			<Access-Code avp_code="20358" func="asciiString" node_type="primitive" out_type="true"/>
-			<Charge-Flow-Type avp_code="20339" func="unsignInt32" node_type="primitive"	out_type="true"/>
-			<Calling-Partys-Category avp_code="20301" func="asciiString"	node_type="primitive" out_type="false"/>
-			<Calling-Vlr-Number avp_code="20302" func="asciiString"	node_type="primitive" out_type="false"/>
-			<Calling-CellID-Or-SAI avp_code="20303" func="asciiString" node_type="primitive" out_type="false"/>
-			<Calling-LAI avp_code="20304" func="asciiString" node_type="primitive" out_type="false"/>	
-			<Called-Vlr-Number avp_code="20305" func="asciiString" node_type="primitive"	out_type="false"/>
-			<Called-CellID-Or-SAI	avp_code="20306" func="asciiString"	node_type="primitive" out_type="false"/>
-			<Called-LAI avp_code="20307" func="asciiString" node_type="primitive"	out_type="false"/>
-			<Called-IMEI avp_code="20308" func="asciiString" node_type="primitive" out_type="false"/>
-			<Calling-IMEI	avp_code="20309" func="asciiString"	node_type="primitive" out_type="false"/>
-			<Original-Called-Party-Id avp_code="20310" func="asciiString" node_type="primitive" out_type="false"/>
-			<High-Layer-Compatibility avp_code="20311" func="asciiString" node_type="primitive" out_type="false"/>
-			<Additional-Calling-Party-Number avp_code="20312" func="asciiString" node_type="primitive" out_type="false"/>
-			<Bearer-Capability avp_code="20313" func="asciiString" node_type="primitive" out_type="true"/>
-			<Bearer-Capability2 avp_code="20314" func="asciiString" node_type="primitive" out_type="false"/>
-			<EventType-BCSM avp_code="20315" func="unsignInt32" node_type="primitive" out_type="false"/>
-			<Redirecting-Party-Id avp_code="20316" func="asciiString" node_type="primitive" out_type="false"/>
-			<Redirection-Reason avp_code="20363" func="unsignInt32" node_type="primitive" out_type="true"/>
-			<UE-IMSI avp_code="20318" func="asciiString" node_type="primitive" out_type="true"/>
-			<Tele-Service-Code avp_code="20319" func="asciiString" node_type="primitive" out_type="false"/>
-			<Bearer-Service-Code avp_code="20320" func="asciiString" node_type="primitive" out_type="false"/>
-			<Call-Reference-Number avp_code="20321" func="scpDecodeHEX" node_type="primitive" out_type="false"/>		  
-			<MSC-Address avp_code="20322" func="asciiString" node_type="primitive" out_type="false"/>
-			<GMSC-Address avp_code="20323" func="asciiString" node_type="primitive" out_type="false"/>
-			<Time-Zone avp_code="20324" func="unsignInt32" node_type="primitive" out_type="false"/>
-			<IN-Service-Indicator avp_code="20325" func="asciiString" node_type="primitive" out_type="false"/>
-			<ServiceKey avp_code="20326" func="unsignInt32" node_type="primitive" out_type="false"/>
-			<Called-Party-Address-Nature avp_code="20328" func="unsignInt32" node_type="primitive" out_type="false"/>
+			<Calling-Party-Address avp_code="20336" func="_string" node_type="primitive" out_type="false"/>
+			<Called-Party-Address avp_code="20337" func="_string" node_type="primitive" out_type="false"/>
+			<SSP-Time avp_code="20386" func="_string" node_type="primitive" out_type="false"/>
+			<Real-Called-Number avp_code="20327" func="_string" node_type="primitive"	out_type="false"/>
+			<Connect-Called-Number avp_code="20373" func="_string" node_type="primitive" out_type="false"/>
+			<Called-Short-Number avp_code="20338" func="_string" node_type="primitive" out_type="false"/>
+			<Access-Code avp_code="20358" func="_string" node_type="primitive" out_type="true"/>
+			<Charge-Flow-Type avp_code="20339" func="_long" node_type="primitive"	out_type="true"/>
+			<Calling-Partys-Category avp_code="20301" func="_string"	node_type="primitive" out_type="false"/>
+			<Calling-Vlr-Number avp_code="20302" func="_string"	node_type="primitive" out_type="false"/>
+			<Calling-CellID-Or-SAI avp_code="20303" func="_string" node_type="primitive" out_type="false"/>
+			<Calling-LAI avp_code="20304" func="_string" node_type="primitive" out_type="false"/>	
+			<Called-Vlr-Number avp_code="20305" func="_string" node_type="primitive"	out_type="false"/>
+			<Called-CellID-Or-SAI	avp_code="20306" func="_string"	node_type="primitive" out_type="false"/>
+			<Called-LAI avp_code="20307" func="_string" node_type="primitive"	out_type="false"/>
+			<Called-IMEI avp_code="20308" func="_string" node_type="primitive" out_type="false"/>
+			<Calling-IMEI	avp_code="20309" func="_string"	node_type="primitive" out_type="false"/>
+			<Original-Called-Party-Id avp_code="20310" func="_string" node_type="primitive" out_type="false"/>
+			<High-Layer-Compatibility avp_code="20311" func="_string" node_type="primitive" out_type="false"/>
+			<Additional-Calling-Party-Number avp_code="20312" func="_string" node_type="primitive" out_type="false"/>
+			<Bearer-Capability avp_code="20313" func="_string" node_type="primitive" out_type="true"/>
+			<Bearer-Capability2 avp_code="20314" func="_string" node_type="primitive" out_type="false"/>
+			<EventType-BCSM avp_code="20315" func="_long" node_type="primitive" out_type="false"/>
+			<Redirecting-Party-Id avp_code="20316" func="_string" node_type="primitive" out_type="false"/>
+			<Redirection-Reason avp_code="20363" func="_long" node_type="primitive" out_type="true"/>
+			<UE-IMSI avp_code="20318" func="_string" node_type="primitive" out_type="true"/>
+			<Tele-Service-Code avp_code="20319" func="_string" node_type="primitive" out_type="false"/>
+			<Bearer-Service-Code avp_code="20320" func="_string" node_type="primitive" out_type="false"/>
+			<Call-Reference-Number avp_code="20321" func="_string" node_type="primitive" out_type="false"/>		  
+			<MSC-Address avp_code="20322" func="_string" node_type="primitive" out_type="false"/>
+			<GMSC-Address avp_code="20323" func="_string" node_type="primitive" out_type="false"/>
+			<Time-Zone avp_code="20324" func="_long" node_type="primitive" out_type="false"/>
+			<IN-Service-Indicator avp_code="20325" func="_string" node_type="primitive" out_type="false"/>
+			<ServiceKey avp_code="20326" func="_long" node_type="primitive" out_type="false"/>
+			<Called-Party-Address-Nature avp_code="20328" func="_long" node_type="primitive" out_type="false"/>
 		</IN-Information>
 	</Service-Information>
 </config>

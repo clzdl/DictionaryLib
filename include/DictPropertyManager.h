@@ -52,9 +52,17 @@ public:
 	int Encode(char *buffer);
 
 	/**
+	 * 解码，形成层级内存结构
+	 */
+	void Decode(char *buffer);
+
+	/**
 	 * 内存结构调试输出
 	 */
 	void DebugDump();
+
+
+	void Insert2SearchCache(std::string path ,IEleProperty* property);
 
 private:
 	DictPropertyManager(const DictPropertyManager &dpm) = delete;

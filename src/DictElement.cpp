@@ -78,6 +78,15 @@ bool ElementNode::GetOutType() const
 {
 	return m_outType;
 }
+void ElementNode::SetValueType(EnumPropertyValueType valueType)
+{
+	m_valueType = valueType;
+}
+EnumPropertyValueType ElementNode::GetValueType() const
+{
+	return m_valueType;
+}
+
 void ElementNode::SetParentPtr(ElementNode *ptr)
 {
 	m_ptrParent = ptr;
@@ -137,9 +146,19 @@ ElementNode ElementManager::GetEleNodeByPath(std::string path)
 {
 	auto it = m_eleContainer.find(path);
 	if(it == m_eleContainer.end())
-		THROW(DictionaryException , "path not exists.");
+		THROW_P1(DictionaryException , "path[%s] not exists." , path.c_str());
 
 	return it->second;
+}
+
+ElementNode ElementManager::GetEleNodeByCode(int avpCode)
+{
+	auto it = m_avpCode2KeyPathRel.find(avpCode);
+	if(it == m_avpCode2KeyPathRel.end())
+		THROW_P1(DictionaryException , "code[%d] not exists.", avpCode);
+
+
+	return GetEleNodeByPath(it->second);
 }
 
 void ElementManager::ReadXmlNode(Poco::XML::Node *xmlNode, ElementNode* eleParent)
@@ -186,6 +205,24 @@ ElementNode ElementManager::CreateEleNode(Poco::XML::Node *xmlNode)
 		Poco::XML::Node *nodeFuncString = nodeAttr->getNamedItem("func");
 		assert(nullptr != nodeFuncString);
 		eleNode.SetFuncString(nodeFuncString->nodeValue());
+
+		if(eleNode.GetFuncString() == "_string")
+		{
+			eleNode.SetValueType(EnumPropertyValueType::_string);
+		}
+		else if(eleNode.GetFuncString() == "_long")
+		{
+			eleNode.SetValueType(EnumPropertyValueType::_long);
+		}
+		else if(eleNode.GetFuncString() == "_double")
+		{
+			eleNode.SetValueType(EnumPropertyValueType::_double);
+		}
+		else
+		{
+			THROW_P1(DictionaryException , "prop func[%s] wrong.only support[_string/_long/_double]",eleNode.GetFuncString().c_str());
+		}
+
 
 		Poco::XML::Node *nodeOutType = nodeAttr->getNamedItem("out_type");
 		assert(nullptr != nodeOutType);

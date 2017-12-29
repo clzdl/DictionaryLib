@@ -42,6 +42,14 @@ enum class EnumEleType
 	_struct,
 };
 
+
+enum class EnumPropertyValueType
+{
+	_string,
+	_long,
+	_double
+};
+
 class ElementNode
 {
 public:
@@ -64,6 +72,9 @@ public:
 	std::string GetFuncString() const;
 	void SetOutType(bool outType);
 	bool GetOutType() const;
+
+	void SetValueType(EnumPropertyValueType valueType);
+	EnumPropertyValueType GetValueType() const;
 	void SetParentPtr(ElementNode *ptr);
 	const ElementNode* GetParentPtr() const;
 
@@ -73,6 +84,7 @@ private:
 	std::string m_nodeName;    ///节点名称
 	std::size_t m_avpCode;		///avpCode码 , 每个节点的code不同
 	std::string m_funcString;			///字段解码函数(暂用作数据类型：string/long/double)
+	EnumPropertyValueType m_valueType;    ///字段值
 	bool m_outType;				///是否输出标识
 	ElementNode *m_ptrParent;    ///指向父节点的指针
 };
@@ -86,6 +98,12 @@ public:
 	 * 根据路径获取字典配置信息
 	 */
 	ElementNode GetEleNodeByPath(std::string path);
+
+	/**
+	 * 根据Code获取字典配置信息
+	 */
+	ElementNode GetEleNodeByCode(int avpCode);
+
 
 	/**
 	 * 输出内存信息
