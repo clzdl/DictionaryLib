@@ -28,7 +28,7 @@ DictPropertyManager::~DictPropertyManager()
 }
 
 
-void DictPropertyManager::SetFieldValueByPath(std::string path , std::string value)
+void DictPropertyManager::SetFieldValueByPath(std::string path , std::string value , bool overlap)
 {
 	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
 	if(en.GetEleType() != EnumEleType::_primitive )
@@ -45,11 +45,19 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , std::string val
 	}
 	else
 	{
-		ElePrimitiveProperty *ptrPrimProperty = dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty);
-		ptrPrimProperty->SetValue(value);
+		if(overlap)
+		{
+			ElePrimitiveProperty *ptrPrimProperty = dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty);
+			ptrPrimProperty->SetValue(value);
+		}
+		else
+		{///新建兄弟节点
+			IEleProperty *siblingPeoperty =  new ElePrimitiveProperty(this,value);
+			ptrPeoperty->AddSibling(siblingPeoperty);
+		}
 	}
 }
-void DictPropertyManager::SetFieldValueByPath(std::string path , long value)
+void DictPropertyManager::SetFieldValueByPath(std::string path , long value , bool overlap)
 {
 	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
 	if(en.GetEleType() != EnumEleType::_primitive)
@@ -66,11 +74,19 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , long value)
 	}
 	else
 	{
-		ElePrimitiveProperty *ptrPrimProperty = dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty);
-		ptrPrimProperty->SetValue(value);
+		if(overlap)
+		{
+			ElePrimitiveProperty *ptrPrimProperty = dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty);
+			ptrPrimProperty->SetValue(value);
+		}
+		else
+		{///新建兄弟节点
+			IEleProperty *siblingPeoperty =  new ElePrimitiveProperty(this,value);
+			ptrPeoperty->AddSibling(siblingPeoperty);
+		}
 	}
 }
-void DictPropertyManager::SetFieldValueByPath(std::string path , double value)
+void DictPropertyManager::SetFieldValueByPath(std::string path , double value , bool overlap)
 {
 	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
 	if(en.GetEleType() != EnumEleType::_primitive)
@@ -87,13 +103,21 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , double value)
 	}
 	else
 	{
-		ElePrimitiveProperty *ptrPrimProperty = dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty);
-		ptrPrimProperty->SetValue(value);
+		if(overlap)
+		{
+			ElePrimitiveProperty *ptrPrimProperty = dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty);
+			ptrPrimProperty->SetValue(value);
+		}
+		else
+		{///新建兄弟节点
+			IEleProperty *siblingPeoperty =  new ElePrimitiveProperty(this,value);
+			ptrPeoperty->AddSibling(siblingPeoperty);
+		}
 	}
 }
 
 
-std::string DictPropertyManager::GetFieldValueByPath(std::string path) const
+std::string DictPropertyManager::GetFieldValueByPath(std::string path , int pos) const
 {
 	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
 	if(en.GetEleType() != EnumEleType::_primitive)
@@ -103,7 +127,12 @@ std::string DictPropertyManager::GetFieldValueByPath(std::string path) const
 	if(nullptr == ptrPeoperty)
 		THROW(DictionaryException , "node property not exists.");
 
-	return dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty)->GetValue();
+	if(0 >= pos )
+	{
+		return dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty)->GetValue();
+	}
+
+	return dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty->GetSiblingByPos(--pos))->GetValue();
 }
 
 IEleProperty* DictPropertyManager::FindPropertyCache(std::string path) const

@@ -58,6 +58,15 @@ EnumPropertyValueType ElePropertyValue::GetValueType() const
 	return m_eleValueType;
 }
 
+IEleProperty::~IEleProperty()
+{
+	for(auto it : m_sameSibling)
+	{
+		delete it;
+		it = nullptr;
+	}
+}
+
 void IEleProperty::SetEleNode(const ElementNode& eleNode)
 {
 	m_eleNode = eleNode;
@@ -71,6 +80,19 @@ void IEleProperty::SetParent(IEleProperty *parent)
 void IEleProperty::SerPropertyManager(DictPropertyManager *manager)
 {
 	m_propertyManager = manager;
+}
+
+void IEleProperty::AddSibling(IEleProperty *property )
+{
+	m_sameSibling.push_back(property);
+}
+
+IEleProperty* IEleProperty::GetSiblingByPos(int pos)
+{
+	if(pos >= m_sameSibling.size())
+		THROW(DictionaryException , "pos overflow.");
+
+	return m_sameSibling.at(pos);
 }
 
 ElePrimitiveProperty::ElePrimitiveProperty(DictPropertyManager *manager,std::string value)
@@ -226,6 +248,10 @@ void ElePrimitiveProperty::DebugDump(int level)
 		prefix.append("-");
 
 	fprintf(stdout , "%s nodeType:%d , value:%s \n" , prefix.c_str(),m_eleType , m_eleValue.GetValue().c_str());
+
+	//printf sibling node information
+	for(auto it : m_sameSibling)
+		it->DebugDump(level);
 }
 
 EleStructProperty::EleStructProperty(DictPropertyManager *manager)

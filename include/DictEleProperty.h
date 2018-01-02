@@ -51,7 +51,7 @@ public:
 	 m_propertyManager(manager)
 	{}
 
-	virtual ~IEleProperty(){}
+	virtual ~IEleProperty();
 	virtual void DebugDump(int level) = 0;
 	/**
 	 * 编码，返回值为编码后长度
@@ -67,10 +67,20 @@ public:
 	void SetParent(IEleProperty *parent);
 
 	void SerPropertyManager(DictPropertyManager *manager);
+
+	/**
+	 * 添加兄弟节点
+	 */
+	void AddSibling(IEleProperty *property );
+
+	/**
+	 * 获取兄弟节点
+	 */
+	IEleProperty* GetSiblingByPos(int pos);
 protected:
 	EnumEleType m_eleType;
 	IEleProperty *m_ptrParent;		///指向父节点
-	std::list<IEleProperty*>  m_sameSibling;   ///相同路径下的兄弟节点
+	std::vector<IEleProperty*>  m_sameSibling;   ///相同路径下的兄弟节点
 	ElementNode m_eleNode;		///指向配置节点指针
 	DictPropertyManager *m_propertyManager;
 };

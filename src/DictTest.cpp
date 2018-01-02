@@ -24,13 +24,16 @@ int main(int argc, char* argv[])
 		property->SetFieldValueByPath("Session-Id", "session-id-123123");
 		property->SetFieldValueByPath("Origin-Host", "origin-host-12123123");
 		property->SetFieldValueByPath("Subscription-Id.Subscription-Id-Type", "Subscription-Id-Type-12123123");
+		property->SetFieldValueByPath("Subscription-Id.Subscription-Id-Type", "Subscription-Id-Type-22222222", false);
 		property->SetFieldValueByPath("Subscription-Id.Subscription-Id-Data", "Subscription-Id-Data-12123123");
+		property->SetFieldValueByPath("Subscription-Id.Subscription-Id-Data", "Subscription-Id-Data-2222222" , false);
 		fprintf(stdout , "///////////////////////////////////\n");
 		property->DebugDump();
 		fprintf(stdout , "///////////////////////////////////\n");
 
 
 		fprintf(stdout, "Subscription-Id.Subscription-Id-Data=%s \n",property->GetFieldValueByPath("Subscription-Id.Subscription-Id-Data").c_str() );
+		fprintf(stdout, "Subscription-Id.Subscription-Id-Data=%s \n",property->GetFieldValueByPath("Subscription-Id.Subscription-Id-Data",1).c_str());
 
 		int len = property->Encode(buffer);
 

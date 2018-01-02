@@ -26,15 +26,15 @@ public:
 	/**
 	 *  按路径设置原子字段
 	 */
-	void SetFieldValueByPath(std::string path , std::string value);
-	void SetFieldValueByPath(std::string path , long value);
-	void SetFieldValueByPath(std::string path , double value);
+	void SetFieldValueByPath(std::string path , std::string value , bool overlap = true);
+	void SetFieldValueByPath(std::string path , long value , bool overlap = true);
+	void SetFieldValueByPath(std::string path , double value , bool overlap = true);
 
 
 	/**
 	 * 按路径获取原子字段值
 	 */
-	std::string GetFieldValueByPath(std::string path) const;
+	std::string GetFieldValueByPath(std::string path, int pos = 0) const;
 
 	/**
 	 * 查找内存中节点是否已存在
