@@ -34,12 +34,12 @@ public:
 	/**
 	 * 按路径获取原子字段值
 	 */
-	std::string GetFieldValueByPath(std::string path);
+	std::string GetFieldValueByPath(std::string path) const;
 
 	/**
-	 * 按路径获取属性节点
+	 * 查找内存中节点是否已存在
 	 */
-	std::unique_ptr<IEleProperty> GetElePropertyByPath(std::string path);
+	IEleProperty* FindPropertyCache(std::string path) const;
 
 
 	/**
@@ -55,7 +55,7 @@ public:
 	/**
 	 * 内存结构调试输出
 	 */
-	void DebugDump();
+	void DebugDump() const;
 
 
 	void Insert2SearchCache(std::string path ,IEleProperty* property);
@@ -66,10 +66,6 @@ private:
 	DictPropertyManager(DictPropertyManager *&dpm) = delete;
 	DictPropertyManager& operator =(DictPropertyManager &&dpm) = delete;
 
-	/**
-	 * 查找内存中节点是否已存在
-	 */
-	IEleProperty* FindPropertyCache(std::string path);
 
 	/**
 	 * 插入属性值

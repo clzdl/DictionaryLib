@@ -93,7 +93,20 @@ void DictPropertyManager::SetFieldValueByPath(std::string path , double value)
 }
 
 
-IEleProperty* DictPropertyManager::FindPropertyCache(std::string path)
+std::string DictPropertyManager::GetFieldValueByPath(std::string path) const
+{
+	ElementNode en = ElementManager::Instance()->GetEleNodeByPath(path);
+	if(en.GetEleType() != EnumEleType::_primitive)
+		THROW(DictionaryException , "only set primitive node.");
+
+	IEleProperty *ptrPeoperty = FindPropertyCache(path);
+	if(nullptr == ptrPeoperty)
+		THROW(DictionaryException , "node property not exists.");
+
+	return dynamic_cast<ElePrimitiveProperty*>(ptrPeoperty)->GetValue();
+}
+
+IEleProperty* DictPropertyManager::FindPropertyCache(std::string path) const
 {
 	auto it = m_eleProperty4Search.find(path);
 	if(it == m_eleProperty4Search.end())
@@ -156,7 +169,7 @@ void DictPropertyManager::InsertEleProperty(std::string path , IEleProperty* ele
 	m_eleProperty4Search.insert(std::make_pair(path,eleProPerty));
 }
 
-void DictPropertyManager::DebugDump()
+void DictPropertyManager::DebugDump() const
 {
 	for(auto it : m_elePropertys)
 	{

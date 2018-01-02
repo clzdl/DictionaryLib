@@ -9,6 +9,7 @@
 #include "DictElement.h"
 #include "DictPropertyManager.h"
 #include "fstream"
+#include "DateUtil.h"
 
 int main(int argc, char* argv[])
 {
@@ -16,7 +17,8 @@ int main(int argc, char* argv[])
 	{
 		DictionaryLib::ElementManager::Instance("../conf/dict-config.xml");
 		DictionaryLib::ElementManager::Instance()->DebugDump();
-
+		char sys[20+1] = {0};
+		fprintf(stdout , "beg time %s\n " , CommonUtils::DateUtil::GetSysdateUsec(sys));
 		char buffer[8096] = {0};
 		std::unique_ptr<DictionaryLib::DictPropertyManager> property = DictionaryLib::DictPropertyManager::Create();
 		property->SetFieldValueByPath("Session-Id", "session-id-123123");
@@ -27,7 +29,12 @@ int main(int argc, char* argv[])
 		property->DebugDump();
 		fprintf(stdout , "///////////////////////////////////\n");
 
+
+		fprintf(stdout, "Subscription-Id.Subscription-Id-Data=%s \n",property->GetFieldValueByPath("Subscription-Id.Subscription-Id-Data").c_str() );
+
 		int len = property->Encode(buffer);
+
+		fprintf(stdout , "end time %s\n " , CommonUtils::DateUtil::GetSysdateUsec(sys));
 
 		std::ofstream of("1111111111.dat",std::ios_base::binary);
 		of.write(buffer , len);

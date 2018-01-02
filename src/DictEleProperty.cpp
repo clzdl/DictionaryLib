@@ -115,6 +115,11 @@ void ElePrimitiveProperty::SetValue(double value)
 	m_eleValue.SetValue(value);
 }
 
+std::string ElePrimitiveProperty::GetValue() const
+{
+	return m_eleValue.GetValue();
+}
+
 int ElePrimitiveProperty::Encode(char *buffer )
 {
 	char *p = buffer;

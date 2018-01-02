@@ -89,6 +89,8 @@ public:
 	void SetValue(long value);
 	void SetValue(double value);
 
+	std::string GetValue() const;
+
 	void DebugDump(int level);
 
 	int Encode(char *buffer );
